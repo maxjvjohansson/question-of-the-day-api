@@ -4,6 +4,7 @@ using QuestionsApi.Data;
 Console.WriteLine("Starting app...");
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -11,30 +12,27 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddDirectoryBrowser();
 
-string connectionString = builder.Environment.IsDevelopment()
+// Determine connection string
+var rawConnection = builder.Environment.IsDevelopment()
     ? "Data Source=questions.db"
     : Environment.GetEnvironmentVariable("POSTGRES_CONNECTION_STRING")
-      ?? throw new InvalidOperationException("Missing connection string");
+      ?? throw new InvalidOperationException("❌ Missing connection string in production!");
 
+Console.WriteLine("📡 Raw connection string: " + rawConnection);
+
+// Add DbContext based on environment
 if (builder.Environment.IsDevelopment())
 {
-    builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connectionString));
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseSqlite(rawConnection));
 }
 else
 {
-    builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseNpgsql(rawConnection));
 }
 
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connectionString));
-}
-
-else
-{
-    builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
-}
-
+// Build app
 WebApplication app;
 try
 {
@@ -49,6 +47,7 @@ catch (Exception ex)
     throw;
 }
 
+// Middleware setup
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -61,20 +60,20 @@ app.UseStaticFiles();
 app.UseAuthorization();
 app.MapControllers();
 
+// Apply any pending migrations
 try
 {
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    Console.WriteLine("🔁 Starting DB migration...");
+    Console.WriteLine("🔁 Running migrations...");
     db.Database.Migrate();
-    Console.WriteLine("✅ Migration successful!");
+    Console.WriteLine("✅ Migration done!");
 }
 catch (Exception ex)
 {
-    Console.WriteLine("❌ Migration failed!");
+    Console.WriteLine("❌ Migration error!");
     Console.WriteLine(ex.Message);
     Console.WriteLine(ex.StackTrace);
 }
-
 
 app.Run();
