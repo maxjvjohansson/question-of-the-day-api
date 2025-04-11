@@ -25,7 +25,8 @@ The API serves **one random question per day**, ensuring consistency throughout 
 - [Entity Framework Core (EF Core)](https://learn.microsoft.com/en-us/ef/core/)
 - [Npgsql (PostgreSQL EF Provider)](https://www.npgsql.org/efcore/)
 - [Swagger / Swashbuckle](https://learn.microsoft.com/en-us/aspnet/core/tutorials/web-api-help-pages-using-swagger?view=aspnetcore-8.0)
-- [Railway](https://railway.app/) for hosting and deployment
+- [Docker](https://www.docker.com/) for containerization and deployment
+- [Railway](https://railway.app/) for hosting
 
 ---
 
@@ -42,19 +43,18 @@ The API serves **one random question per day**, ensuring consistency throughout 
  
   - In `appsettings.json` or environment variables, add your PostgreSQL connection string:
 
-
-```ini
+```
 POSTGRES_CONNECTION_STRING=Host=...;Database=...;Username=...;Password=...
 ```
  
-4. **Run migrations** 
+3. **Run migrations** 
 
 
 ```bash
 dotnet ef database update
 ```
  
-6. **Start the API** 
+4. **Start the API** 
 
 
 ```bash
@@ -107,9 +107,9 @@ This project was built independently, but inspired by the following resources:
 
 
 
-## 🧑‍💻 Author 
+## Author 
 
-Created by [Max Johansson]
+Created by Max Johansson
 
 
 ---
@@ -118,4 +118,4 @@ Created by [Max Johansson]
 
 ## License 
 
-This project is open-source and available under the [MIT License]
+This project is open-source and available under the MIT License
