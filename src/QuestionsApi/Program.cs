@@ -38,4 +38,12 @@ app.UseDefaultFiles();
 app.UseStaticFiles();
 app.UseAuthorization();
 app.MapControllers();
-app.Run();
+try
+{
+    app.Run();
+}
+catch (Exception ex)
+{
+    Console.WriteLine("❌ Unhandled exception:");
+    Console.WriteLine(ex.ToString());
+}
