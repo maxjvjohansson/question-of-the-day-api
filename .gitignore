@@ -19,6 +19,11 @@ project.lock.json
 *.pyc
 nupkg/
 
+# SQLite database files
+*.db
+*.db-shm
+*.db-wal
+
 # Visual Studio Code
 .vscode/*
 !.vscode/settings.json
