@@ -2,25 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Question of the day API</title>
+    <title>Question of the Day API</title>
     <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-<section class="heading">
+<main class="container">
+    <header class="header">
+        <h1 class="title">Question of the Day API</h1>
+        <p class="description">
+            Submit your question to our database. Make it thoughtful and engaging! <br>
+            It must be between 10 and 250 characters and end with a "<code>?</code>".
+        </p>
+    </header>
 
-    <h1>Question of the Day API</h1>
-    <p>Submit your question to our database. Make it thoughtful and engaging! <br>
-        It must be between 10 and 250 characters and end with a "<code>?</code>".</p>
-</section>
+    <section class="form-section">
+        <form id="questionForm" class="question-form">
+            <label for="question" class="question-label">Your question:</label>
+            <textarea
+                    id="question"
+                    class="question-input"
+                    name="question"
+                    required
+                    minlength="10"
+                    maxlength="250"
+                    placeholder="Ex: What's your favorite programming language?"></textarea>
+            <button type="submit" class="submit-button">Submit</button>
+        </form>
 
-<form id="questionForm">
-    <label for="question">Your question:</label>
-    <textarea type="text" id="question" name="question" required minlength="10" maxlength="250"
-              placeholder="Ex: What's your favorite programming language?"></textarea>
-    <button type="submit">Submit</button>
-</form>
+        <p id="response" class="response-message"></p>
+    </section>
+</main>
 
-<p id="response"></p>
 <script src="./js/script.js"></script>
 </body>
 </html>
