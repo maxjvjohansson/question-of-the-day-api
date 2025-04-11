@@ -1,5 +1,28 @@
 using Microsoft.EntityFrameworkCore;
 using QuestionsApi.Data;
+using System.Text;
+AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) => {
+    try {
+        var exception = eventArgs.ExceptionObject as Exception;
+        var message = new StringBuilder();
+        message.AppendLine("FATAL UNHANDLED EXCEPTION:");
+        message.AppendLine(exception?.GetType().FullName ?? "Unknown exception type");
+        message.AppendLine(exception?.Message ?? "No message");
+        message.AppendLine(exception?.StackTrace ?? "No stack trace");
+        
+        if (exception?.InnerException != null) {
+            message.AppendLine("Inner exception:");
+            message.AppendLine(exception.InnerException.GetType().FullName);
+            message.AppendLine(exception.InnerException.Message);
+            message.AppendLine(exception.InnerException.StackTrace);
+        }
+        
+        Console.Error.WriteLine(message.ToString());
+    }
+    catch {
+        Console.Error.WriteLine("Failed to log exception details");
+    }
+};
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -81,4 +104,14 @@ app.UseDefaultFiles();
 app.UseStaticFiles();
 app.UseAuthorization();
 app.MapControllers();
-app.Run();
+try {
+    Console.WriteLine("Application starting...");
+    app.Run();
+    Console.WriteLine("Application stopped normally");
+}
+catch (Exception ex) {
+    Console.Error.WriteLine($"Application crashed with exception: {ex.GetType().FullName}");
+    Console.Error.WriteLine($"Message: {ex.Message}");
+    Console.Error.WriteLine($"Stack trace: {ex.StackTrace}");
+    throw;
+}
