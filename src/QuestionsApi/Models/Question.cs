@@ -12,5 +12,5 @@ public class Question
     public string Text { get; set; } = string.Empty;
     public DateTime DateAdded { get; set; } = DateTime.UtcNow;
     
-    public DateOnly? UsedAsDaily  { get; set; }
+    public DateTime? UsedAsDaily { get; set; }
 }

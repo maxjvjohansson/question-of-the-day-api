@@ -12,8 +12,8 @@ using QuestionsApi.Data;
 namespace QuestionsApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250411153147_InitPostgres")]
-    partial class InitPostgres
+    [Migration("20250411162931_InitPostgresClean")]
+    partial class InitPostgresClean
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,8 +41,8 @@ namespace QuestionsApi.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)");
 
-                    b.Property<DateOnly?>("UsedAsDaily")
-                        .HasColumnType("date");
+                    b.Property<DateTime?>("UsedAsDaily")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 

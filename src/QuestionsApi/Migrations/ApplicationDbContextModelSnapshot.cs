@@ -38,8 +38,8 @@ namespace QuestionsApi.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)");
 
-                    b.Property<DateOnly?>("UsedAsDaily")
-                        .HasColumnType("date");
+                    b.Property<DateTime?>("UsedAsDaily")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 

@@ -20,22 +20,23 @@ namespace QuestionsApi.Controllers
         [HttpGet("today")]
         public async Task<ActionResult<Question>> GetToday()
         {
-            var today = DateOnly.FromDateTime(DateTime.UtcNow);
+            var today = DateTime.UtcNow.Date;
+
             var todayQuestion = await _context.Questions
-                .Where(q => q.UsedAsDaily == today)
+                .Where(q => q.UsedAsDaily.HasValue && q.UsedAsDaily.Value.Date == today)
                 .FirstOrDefaultAsync();
-            
+
             if (todayQuestion != null)
             {
                 return Ok(todayQuestion);
             }
-            
+
             var count = await _context.Questions.CountAsync();
             if (count == 0)
             {
                 return NotFound("No questions found");
             }
-            
+
             var random = new Random();
             var skip = random.Next(count);
 
@@ -43,9 +44,10 @@ namespace QuestionsApi.Controllers
                 .OrderBy(q => q.Id)
                 .Skip(skip)
                 .FirstAsync();
-            
+
             randomQuestion.UsedAsDaily = today;
             await _context.SaveChangesAsync();
+
             return Ok(randomQuestion);
         }
 

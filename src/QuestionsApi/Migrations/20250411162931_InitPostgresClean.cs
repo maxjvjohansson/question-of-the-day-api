@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace QuestionsApi.Migrations
 {
     /// <inheritdoc />
-    public partial class InitPostgres : Migration
+    public partial class InitPostgresClean : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,7 +20,7 @@ namespace QuestionsApi.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Text = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
                     DateAdded = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UsedAsDaily = table.Column<DateOnly>(type: "date", nullable: true)
+                    UsedAsDaily = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {

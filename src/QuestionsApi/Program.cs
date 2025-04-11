@@ -13,8 +13,17 @@ builder.Services.AddDirectoryBrowser();
 
 string connectionString = builder.Environment.IsDevelopment()
     ? "Data Source=questions.db"
-    : ConvertPostgresConnectionString(Environment.GetEnvironmentVariable("POSTGRES_CONNECTION_STRING"))
-      ?? throw new InvalidOperationException("Missing production connection string");
+    : Environment.GetEnvironmentVariable("POSTGRES_CONNECTION_STRING")
+      ?? throw new InvalidOperationException("Missing connection string");
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connectionString));
+}
+else
+{
+    builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
+}
 
 string? ConvertPostgresConnectionString(string? connectionString)
 {
@@ -55,6 +64,7 @@ else
 }
 
 var app = builder.Build();
+Console.WriteLine("✅ App built successfully");
 
 if (app.Environment.IsDevelopment())
 {
