@@ -11,24 +11,10 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddDirectoryBrowser();
 
-var rawConn = Environment.GetEnvironmentVariable("POSTGRES_CONNECTION_STRING");
-Console.WriteLine($"📡 RAW POSTGRES_CONNECTION_STRING: {rawConn}");
-
-string connectionString;
-
-if (builder.Environment.IsDevelopment())
-{
-    connectionString = "Data Source=questions.db";
-}
-else
-{
-    if (string.IsNullOrWhiteSpace(rawConn))
-        throw new InvalidOperationException("❌ Missing production connection string");
-
-    // Om det redan är i rätt format, använd direkt
-    connectionString = rawConn.Contains("Host=") ? rawConn : ConvertPostgresConnectionString(rawConn);
-}
-
+string connectionString = builder.Environment.IsDevelopment()
+    ? "Data Source=questions.db"
+    : ConvertPostgresConnectionString(Environment.GetEnvironmentVariable("POSTGRES_CONNECTION_STRING"))
+      ?? throw new InvalidOperationException("Missing production connection string");
 
 string? ConvertPostgresConnectionString(string? connectionString)
 {
@@ -82,10 +68,20 @@ app.UseStaticFiles();
 app.UseAuthorization();
 app.MapControllers();
 
-using (var scope = app.Services.CreateScope())
+try
 {
+    using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    Console.WriteLine("🔁 Starting DB migration...");
     db.Database.Migrate();
+    Console.WriteLine("✅ Migration successful!");
 }
+catch (Exception ex)
+{
+    Console.WriteLine("❌ Migration failed!");
+    Console.WriteLine(ex.Message);
+    Console.WriteLine(ex.StackTrace);
+}
+
 
 app.Run();
