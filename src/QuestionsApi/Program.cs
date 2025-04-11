@@ -13,7 +13,7 @@ builder.Services.AddDirectoryBrowser();
 
 string connectionString = builder.Environment.IsDevelopment()
     ? "Data Source=questions.db"
-    : ConvertPostgresConnectionString(Environment.GetEnvironmentVariable("DATABASE_URL"))
+    : ConvertPostgresConnectionString(Environment.GetEnvironmentVariable("POSTGRES_CONNECTION_STRING"))
       ?? throw new InvalidOperationException("Missing production connection string");
 
 string? ConvertPostgresConnectionString(string? connectionString)
