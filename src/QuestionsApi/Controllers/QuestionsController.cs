@@ -7,7 +7,7 @@ namespace QuestionsApi.Controllers
 
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/questions")]
     public class QuestionsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
