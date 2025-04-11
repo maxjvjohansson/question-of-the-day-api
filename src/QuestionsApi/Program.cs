@@ -11,10 +11,24 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddDirectoryBrowser();
 
-string connectionString = builder.Environment.IsDevelopment()
-    ? "Data Source=questions.db"
-    : ConvertPostgresConnectionString(Environment.GetEnvironmentVariable("POSTGRES_CONNECTION_STRING"))
-      ?? throw new InvalidOperationException("Missing production connection string");
+var rawConn = Environment.GetEnvironmentVariable("POSTGRES_CONNECTION_STRING");
+Console.WriteLine($"📡 RAW POSTGRES_CONNECTION_STRING: {rawConn}");
+
+string connectionString;
+
+if (builder.Environment.IsDevelopment())
+{
+    connectionString = "Data Source=questions.db";
+}
+else
+{
+    if (string.IsNullOrWhiteSpace(rawConn))
+        throw new InvalidOperationException("❌ Missing production connection string");
+
+    // Om det redan är i rätt format, använd direkt
+    connectionString = rawConn.Contains("Host=") ? rawConn : ConvertPostgresConnectionString(rawConn);
+}
+
 
 string? ConvertPostgresConnectionString(string? connectionString)
 {
