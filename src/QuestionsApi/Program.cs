@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using QuestionsApi.Data;
 
+Console.WriteLine("Starting app...");
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -12,7 +13,7 @@ builder.Services.AddDirectoryBrowser();
 
 string connectionString = builder.Environment.IsDevelopment()
     ? "Data Source=questions.db"
-    : ConvertPostgresConnectionString(Environment.GetEnvironmentVariable("POSTGRES_CONNECTION_STRING"))
+    : ConvertPostgresConnectionString(Environment.GetEnvironmentVariable("DATABASE_URL"))
       ?? throw new InvalidOperationException("Missing production connection string");
 
 string? ConvertPostgresConnectionString(string? connectionString)
