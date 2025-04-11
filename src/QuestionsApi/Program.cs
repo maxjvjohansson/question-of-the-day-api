@@ -1,28 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using QuestionsApi.Data;
-using System.Text;
-AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) => {
-    try {
-        var exception = eventArgs.ExceptionObject as Exception;
-        var message = new StringBuilder();
-        message.AppendLine("FATAL UNHANDLED EXCEPTION:");
-        message.AppendLine(exception?.GetType().FullName ?? "Unknown exception type");
-        message.AppendLine(exception?.Message ?? "No message");
-        message.AppendLine(exception?.StackTrace ?? "No stack trace");
-        
-        if (exception?.InnerException != null) {
-            message.AppendLine("Inner exception:");
-            message.AppendLine(exception.InnerException.GetType().FullName);
-            message.AppendLine(exception.InnerException.Message);
-            message.AppendLine(exception.InnerException.StackTrace);
-        }
-        
-        Console.Error.WriteLine(message.ToString());
-    }
-    catch {
-        Console.Error.WriteLine("Failed to log exception details");
-    }
-};
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -78,21 +55,6 @@ else
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    try
-    {
-        var context = services.GetRequiredService<ApplicationDbContext>();
-        context.Database.Migrate();
-    }
-    catch (Exception ex)
-    {
-        var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred while migrating the database.");
-    }
-}
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -104,14 +66,11 @@ app.UseDefaultFiles();
 app.UseStaticFiles();
 app.UseAuthorization();
 app.MapControllers();
-try {
-    Console.WriteLine("Application starting...");
-    app.Run();
-    Console.WriteLine("Application stopped normally");
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    db.Database.Migrate();
 }
-catch (Exception ex) {
-    Console.Error.WriteLine($"Application crashed with exception: {ex.GetType().FullName}");
-    Console.Error.WriteLine($"Message: {ex.Message}");
-    Console.Error.WriteLine($"Stack trace: {ex.StackTrace}");
-    throw;
-}
+
+app.Run();
