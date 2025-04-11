@@ -11,4 +11,6 @@ public class Question
     [MaxLength(250, ErrorMessage = "Question text must be between 10 and 250 characters")]
     public string Text { get; set; } = string.Empty;
     public DateTime DateAdded { get; set; } = DateTime.UtcNow;
+    
+    public DateOnly? UsedAsDaily  { get; set; }
 }
