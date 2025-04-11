@@ -63,8 +63,19 @@ else
     builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
 }
 
-var app = builder.Build();
-Console.WriteLine("✅ App built successfully");
+WebApplication app;
+try
+{
+    Console.WriteLine("🚧 Building app...");
+    app = builder.Build();
+    Console.WriteLine("✅ App built!");
+}
+catch (Exception ex)
+{
+    Console.WriteLine("❌ Build failed: " + ex.Message);
+    Console.WriteLine(ex.StackTrace);
+    throw;
+}
 
 if (app.Environment.IsDevelopment())
 {
