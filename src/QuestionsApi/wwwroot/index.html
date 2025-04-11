@@ -3,16 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Question of the day API</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-    <form id="questionForm" method="post" action="/questions">
-        <fieldset>
-            <legend>Question of the day</legend>
-            <label for="question">Question</label>
-            <input type="text" id="question" name="question" required placeholder="Input your question here..."></input>
-        </fieldset>
-        <button type="submit">Submit</button>
-    </form>
+<section class="heading">
+
+    <h1>Question of the Day API</h1>
+    <p>Submit your question to our database. Make it thoughtful and engaging! <br>
+        It must be between 10 and 250 characters and end with a "<code>?</code>".</p>
+</section>
+
+<form id="questionForm">
+    <label for="question">Your question:</label>
+    <textarea type="text" id="question" name="question" required minlength="10" maxlength="250"
+              placeholder="Ex: What's your favorite programming language?"></textarea>
+    <button type="submit">Submit</button>
+</form>
+
+<p id="response"></p>
+<script src="./js/script.js"></script>
 </body>
 </html>
