@@ -32,32 +32,35 @@ The API serves **one random question per day**, ensuring consistency throughout 
 
 ## Installation & Usage
 
-1. **Clone the repo**  
-   ```bash
-   git clone https://github.com/yourusername/question-of-the-day-api.git
-   cd question-of-the-day-api
+1. **Clone the repo**
+```
+git clone https://github.com/maxjvjohansson/question-of-the-day-api.git
+cd question-of-the-day-api
 ```
 
  
 2. **Set up your database connection** 
- 
-  - In `appsettings.json` or environment variables, add your PostgreSQL connection string:
+In your `appsettings.json` or as an environment variable, define:
+
 
 ```
-POSTGRES_CONNECTION_STRING=Host=...;Database=...;Username=...;Password=...
+POSTGRES_CONNECTION_STRING=Host=your-host;Database=your-db;Username=your-user;Password=your-password
 ```
  
 3. **Run migrations** 
 
+> Make sure you have the EF Core CLI installed (`dotnet tool install --global dotnet-ef` if needed).
 
-```bash
-dotnet ef database update
+
+
+```
+dotnet ef database update --project src/QuestionsApi
 ```
  
 4. **Start the API** 
 
 
-```bash
+```
 dotnet run --project src/QuestionsApi
 ```
 
