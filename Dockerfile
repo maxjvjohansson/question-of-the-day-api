@@ -6,7 +6,7 @@ COPY . .
 RUN dotnet restore "src/QuestionsApi/QuestionsApi.csproj"
 RUN dotnet publish "src/QuestionsApi/QuestionsApi.csproj" -c Release -o /out
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0.100 AS runtime
 WORKDIR /app
 
 COPY --from=build /out .
